@@ -1,90 +1,90 @@
-import random
-import tkinter as tk
-from tkinter import messagebox
-from tkinter import font as tkfont
-import pyttsx3
+importar aleatorio
+importar tkinter como tk
+desde tkinter importar cuadro de mensaje
+desde tkinter importar fuente como fuente tk
+importar pyttsx3
 
-engine = pyttsx3.init()
+motor = pyttsx3.init()
 
 # Obtener todas las voces disponibles
-voices = engine.getProperty('voices')
+voces = motor.obtener propiedad('voces')
 
 # Buscar una voz en español (puede variar según tu sistema)
-for voice in voices:
-    if 'spanish' in voice.name.lower() or 'español' in voice.name.lower():
-        engine.setProperty('voice', voice.id)
-        break
-else:
-    # Si no encuentra voz en español, usar la primera disponible
-    engine.setProperty('voice', voices[0].id)
+para voz en voces:
+ si 'español' en voz.nombre.inferior() o 'español' en voz.nombre.inferior():
+ motor.establecer propiedad('voz', voz.id)
+ romper
+de lo contrario:
+ # Si no encuentro voz en español, usar la primera disponible
+ motor.establecer propiedad('voz', voces[0].id)
 
-engine.setProperty('rate', 150)  # Velocidad del habla
+motor.establecer propiedad('tasa', 150) # Velocidad del habla
 
 # Variables globales del juego
-numbers_called = []
-card = []
-game_over = False
-card_labels = []
-called_numbers_text = None
-number_label = None
-last_number_label = None  # Nueva etiqueta para mostrar el último número llamado
-completed_patterns = set()  # Para registrar los patrones ya completados
+números_llamados = []
+tarjeta = []
+game_over = Falso
+etiquetas_tarjetas = []
+texto_números_llamados = Ninguno
+etiqueta_número = Ninguno
+etiqueta_último_número = Ninguno # Nueva etiqueta para perder el último número llamado
+patrones_completados = set() # Para registrador los patrones ya completos
 
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
+def hablar(texto):
+ motor.decir(texto)
+ motor.correr y esperar()
 
 def reset_game():
-    global numbers_called, card, game_over, completed_patterns
-    numbers_called = []
-    card = generate_card()
-    game_over = False
-    completed_patterns = set()  # Limpiar patrones completados
-    update_display()
+ global números_llamados, carta, juego_terminado, patrones_completados
+ números_llamados = []
+ tarjeta = generar_tarjeta()
+ game_over = Falso
+ patrones_completados = set() # Limpiar patrones completos
+ actualizar_display()
 
-def generate_card():
-    # Generar una tarjeta de bingo válida
-    card_columns = []
-    # B: 1-15, I: 16-30, N:31-45, G:46-60, O:61-75
-    ranges = [(1, 15), (16, 30), (31, 45), (46, 60), (61, 75)]
+def generar_tarjeta():
+ # Generar una tarjeta de bingo válida
+ columnas_tarjetas = []
+ # B: 1-15, I: 16-30, N:31-45, G:46-60, O:61-75
+ rangos = [(1, 15), (16, 30), (31, 45), (46, 60), (61, 75)]
     
-    for i in range(5):
-        column = random.sample(range(ranges[i][0], ranges[i][1] + 1), 5)
-        if i == 2:  # La columna N tiene un espacio libre en el medio
-            column[2] = "⭐"
-        card_columns.append(column)
+ para i en rango(5):
+ columna = aleatoria.muestra(rango(rangos[i][0], rangos[i][1] + 1), 5)
+ si yo == 2: # La columna N tiene un espacio libre en el medio
+ columna[2] = "⭐"
+ card_columns.append(columna)
     
-    # Transponer para tener filas en lugar de columnas
-    rows = list(zip(*card_columns))
-    return [list(row) for row in rows]
+ # Transponedor para tener filas en lugar de columnas
+ filas = lista(cremallera(*card_columns))
+ retorno [lista(fila) para fila en filas]
 
-def get_letter(number):
-    # Determinar la letra correspondiente al número
-    if 1 <= number <= 15:
-        return "B"
-    elif 16 <= number <= 30:
-        return "I"
-    elif 31 <= number <= 45:
-        return "N"
-    elif 46 <= number <= 60:
-        return "G"
-    elif 61 <= number <= 75:
-        return "O"
-    return ""
+def obtener_letra(número):
+ # Determinar la letra correspondiente al número
+ si 1 <= número <= 15:
+ retorno "B"
+ elif 16 <= número <= 30:
+ retorno "Yo"
+ elif 31 <= número <= 45:
+ retorno "N"
+ elif 46 <= número <= 60:
+ retorno "G"
+ elif 61 <= número <= 75:
+ retorno "O"
+ retorno ""
 
-def call_number():
-    global numbers_called, game_over
+def número de llamada():
+ global números_llamados, juego_terminado
     
-    if game_over:
-        messagebox.showinfo("Juego terminado", "¡BINGO COMPLETO! Presiona 'Reiniciar Juego' para jugar otra vez.")
-        return
+ si game_over:
+ cuadro de mensaje.showinfo("Juego terminado", "¡BINGO COMPLETO! Presiona 'Reiniciar Juego' para jugar otra vez.")
+ retorno
         
-    if len(numbers_called) == 75:
-        messagebox.showinfo("Fin del juego", "Todos los números han sido llamados!")
-        game_over = True
-        return
+ si len(números_llamados) == 75:
+ cuadro de mensaje.showinfo(„Fin del juego", "¡Todos los números han sido llamados!")
+ game_over = Verdaddero
+ retorno
         
-    available_numbers = [num for num in range(1, 76) if num not in numbers_called]
+ números_disponibles = [num para num en el rango (1, 76) si num no está en números_llamados]
     number = random.choice(available_numbers)
     numbers_called.append(number)
     
@@ -220,64 +220,64 @@ for j in range(5):
     letter_label.grid(row=0, column=j, pady=(0, 5))
 
 # Crear etiquetas para la tarjeta
-card_labels = []
-for i in range(1, 6):  # Empieza en 1 por las letras arriba
-    row_labels = []
-    for j in range(5):
-        label = tk.Label(
-            card_frame, 
-            text="", 
-            width=4, 
-            height=2,
-            relief=tk.RIDGE,
-            font=custom_font
+etiquetas_tarjetas = []
+para i en el rango (1, 6): # Empieza en 1 por las letras arriba
+ etiquetas_fila = []
+ para j en el rango (5):
+ etiqueta = tk.Label(
+ card_frame, 
+ text="", 
+ ancho=4, 
+ alta=2,
+ alivio=tk.RIDGE,
+ fuente=fuente_personalizada
         )
-        label.grid(row=i, column=j, padx=2, pady=2)
-        row_labels.append(label)
-    card_labels.append(row_labels)
+ etiqueta.grid(fila=i, columna=j, padx=2, pady=2)
+ row_labels.append(etiqueta)
+ card_labels.append(row_labels)
 
 # Marco para los controles
 control_frame = tk.Frame(main_frame)
 control_frame.pack(pady=20)
 
-# Botón para llamar número
+# Botón para llamar al mundo
 call_button = tk.Button(
-    control_frame,
-    text="Llamar Número",
-    command=call_number,
-    font=custom_font,
-    bg="green",
-    fg="white"
+ marco_control,
+ texto="Llamar Número",
+ comando=número_llamada,
+ fuente=fuente_personalizada,
+ bg="verde",
+ fg="blanco"
 )
-call_button.pack(side=tk.LEFT, padx=10)
+call_button.pack(lado=tk.IZQUIERDA, padx=10)
 
 # Botón para reiniciar
-reset_button = tk.Button(
-    control_frame,
-    text="Reiniciar Juego",
-    command=reset_game,
-    font=custom_font,
-    bg="blue",
-    fg="white"
+botón_reset = tk.Button(
+ marco_control,
+ texto="Reiniciar Juego",
+ comando=reset_game,
+ fuente=fuente_personalizada,
+ bg="azul",
+ fg="blanco"
 )
-reset_button.pack(side=tk.LEFT, padx=10)
+reset_button.pack(lado=tk.IZQUIERDA, padx=10)
 
-# Área para mostrar números llamados
-called_numbers_frame = tk.Frame(main_frame)
-called_numbers_frame.pack(pady=10)
+# Área para matar nuevos llamados
+marco_números_llamado = tk.Frame(marco_principal)
+llamado_numbers_frame.pack(pady=10)
 
-tk.Label(called_numbers_frame, text="Números llamados:", font=custom_font).pack()
+tk.Label(llamado_numbers_frame, text="Números llamados:", font=custom_font).pack()
 
-called_numbers_text = tk.Text(
-    called_numbers_frame,
-    height=5,
-    width=50,
-    font=("Helvetica", 10)
+llamado_números_texto = tk.Texto(
+ marco_números_llamado,
+ alta=5,
+ ancho=50,
+ font=("Helvetica", 10)
 )
-called_numbers_text.pack()
+llamado_números_texto.pack()
 
 # Inicializar el juego
-reset_game()
+restablecer_juego()
 
 # Iniciar la aplicación
-ventana.mainloop()
+ventana.mainloop
