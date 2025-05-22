@@ -1,5 +1,3 @@
-
-
 import random
 import tkinter as tk
 from tkinter import messagebox
@@ -21,8 +19,6 @@ else:
     engine.setProperty('voice', voices[0].id)
 
 engine.setProperty('rate', 150)  # Velocidad del habla
-
-
 
 # Variables globales del juego
 numbers_called = []
@@ -224,61 +220,61 @@ for j in range(5):
     letter_label.grid(row=0, column=j, pady=(0, 5))
 
 # Crear etiquetas para la tarjeta
-etiquetas_tarjetas = []
-para i en rango(1, 6):  # Empieza en 1 por las letras arriba
- etiquetas_fila = []
- para j en rango(5):
- etiqueta = tk.Etiqueta(
- card_frame, 
- texto="", 
- ancho=4, 
- alta=2,
- alivio=tk.CRESTA,
- fuente=fuente_personalizada
+card_labels = []
+for i in range(1, 6):  # Empieza en 1 por las letras arriba
+    row_labels = []
+    for j in range(5):
+        label = tk.Label(
+            card_frame, 
+            text="", 
+            width=4, 
+            height=2,
+            relief=tk.RIDGE,
+            font=custom_font
         )
- etiqueta.rejilla(fila=i, columna=j, padx=2, pady=2)
- row_labels.append(etiqueta)
- card_labels.append(fila_etiquetas)
+        label.grid(row=i, column=j, padx=2, pady=2)
+        row_labels.append(label)
+    card_labels.append(row_labels)
 
 # Marco para los controles
-control_frame = tk.Marco(main_frame)
-control_frame.paquete(pady=20)
+control_frame = tk.Frame(main_frame)
+control_frame.pack(pady=20)
 
-# Botón para llamar al mundo
-botón_llamada = tk.Botón(
- marco_control,
- texto=„Llamar Número",
- comando=número_llamada,
- fuente=fuente_personalizada,
- bg="verde",
- fg="blanco"
+# Botón para llamar número
+call_button = tk.Button(
+    control_frame,
+    text="Llamar Número",
+    command=call_number,
+    font=custom_font,
+    bg="green",
+    fg="white"
 )
-botón_llamada.paquete(lado=tk.IZQUIERDA, padx=10)
+call_button.pack(side=tk.LEFT, padx=10)
 
 # Botón para reiniciar
-botón_reset = tk.Botón(
- marco_control,
- texto=„Reiniciar Juego",
- comando=reset_game,
- fuente=fuente_personalizada,
- bg="azul",
- fg="blanco"
+reset_button = tk.Button(
+    control_frame,
+    text="Reiniciar Juego",
+    command=reset_game,
+    font=custom_font,
+    bg="blue",
+    fg="white"
 )
-reset_button.paquete(lado=tk.IZQUIERDA, padx=10)
+reset_button.pack(side=tk.LEFT, padx=10)
 
-# Área para matar nuevos llamados
-llamado_números_marco = tk.Marco(main_frame)
-marco_números_llamado.paquete(pady=10)
+# Área para mostrar números llamados
+called_numbers_frame = tk.Frame(main_frame)
+called_numbers_frame.pack(pady=10)
 
-tk.Etiqueta(marco_números_llamado, texto="Números llamados:", fuente=fuente_personalizada).paquete()
+tk.Label(called_numbers_frame, text="Números llamados:", font=custom_font).pack()
 
-llamado_números_texto = tk.Texto(
- marco_números_llamado,
- alta=5,
- ancho=50,
- fuente=(„Helvética", 10)
+called_numbers_text = tk.Text(
+    called_numbers_frame,
+    height=5,
+    width=50,
+    font=("Helvetica", 10)
 )
-llamado_números_texto.paquete()
+called_numbers_text.pack()
 
 # Inicializar el juego
 reset_game()
